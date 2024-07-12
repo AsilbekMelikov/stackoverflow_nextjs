@@ -42,7 +42,6 @@ export default function RootLayout({
             },
           }}
         >
-          <h1 className={"h3-bold"}>hello worldf </h1>
           <ThemeProvider>{children}</ThemeProvider>
         </ClerkProvider>
       </body>
