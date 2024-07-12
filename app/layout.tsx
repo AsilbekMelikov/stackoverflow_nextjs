@@ -1,15 +1,9 @@
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
-import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
 import React from "react";
 import { Inter, Space_Grotesk } from "next/font/google";
 import { Metadata } from "next";
 import { ThemeProvider } from "@/context/ThemeProvider";
+import "./global.css";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -48,12 +42,7 @@ export default function RootLayout({
             },
           }}
         >
-          <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
+          <h1 className={"h3-bold"}>hello worldf </h1>
           <ThemeProvider>{children}</ThemeProvider>
         </ClerkProvider>
       </body>

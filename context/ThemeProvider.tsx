@@ -22,11 +22,11 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  useEffect(() => {
-    handleThemeChange();
+  // useEffect(() => {
+  //   handleThemeChange();
 
-    // eslint-disable-next-line
-  }, [mode]);
+  //   // eslint-disable-next-line
+  // }, [mode]);
 
   return (
     <ThemeContext.Provider value={{ mode, setMode }}>
