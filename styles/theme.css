@@ -152,7 +152,7 @@
   }
 
   .body-semibold {
-    @apply text-[14px] font-semibold leading-[18.2px];
+    @apply text-[14px] font-semibold leading-[18.2px] !important;
   }
 
   .small-regular {
