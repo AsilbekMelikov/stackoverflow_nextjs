@@ -110,13 +110,13 @@ export interface CreateQuestionParams {
 //   limit?: number;
 // }
 
-// export interface CreateUserParams {
-//   clerkId: string;
-//   name: string;
-//   username: string;
-//   email: string;
-//   picture: string;
-// }
+export interface CreateUserParams {
+  clerkId: string;
+  name: string;
+  username: string;
+  email: string;
+  picture: string;
+}
 
 // export interface GetUserByIdParams {
 //   userId: string;
@@ -129,11 +129,11 @@ export interface CreateQuestionParams {
 //   searchQuery?: string; // Add searchQuery parameter
 // }
 
-// export interface UpdateUserParams {
-//   clerkId: string;
-//   updateData: Partial<IUser>;
-//   path: string;
-// }
+export interface UpdateUserParams {
+  clerkId: string;
+  updateData: Partial<IUser>;
+  path: string;
+}
 
 // export interface ToggleSaveQuestionParams {
 //   userId: string;
@@ -155,6 +155,6 @@ export interface CreateQuestionParams {
 //   pageSize?: number;
 // }
 
-// export interface DeleteUserParams {
-//   clerkId: string;
-// }
+export interface DeleteUserParams {
+  clerkId: string;
+}
