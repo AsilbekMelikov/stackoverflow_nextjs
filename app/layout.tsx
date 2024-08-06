@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import React from "react";
