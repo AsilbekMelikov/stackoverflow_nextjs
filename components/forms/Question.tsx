@@ -87,8 +87,9 @@ const Question = ({ mongoUserId }: Props) => {
       await createQuestion({
         title: values.title,
         content: values.explanation,
-        author: JSON.parse(mongoUserId),
         tags: values.tags,
+        author: JSON.parse(mongoUserId),
+        path: pathname,
       });
 
       router.push("/");

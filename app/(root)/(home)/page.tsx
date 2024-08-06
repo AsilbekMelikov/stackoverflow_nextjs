@@ -5,49 +5,12 @@ import QuestionCard from "@/components/shared/QuestionCard";
 import LocalSearchBar from "@/components/shared/search/LocalSearchBar";
 import { Button } from "@/components/ui/button";
 import { HomePageFilters } from "@/constants/filters";
+import { getQuestions } from "@/lib/actions/question.action";
 import Link from "next/link";
 import React from "react";
 
-const Home = () => {
-  const questions = [
-    {
-      _id: "1",
-      title:
-        "The Lightning Component c:LWC_PizzaTracker generated invalid output for field status. Error How to solve this",
-      tags: [
-        { _id: "1", name: "Javascript" },
-        { _id: "2", name: "Sql" },
-      ],
-      author: {
-        _id: "1",
-        name: "John Doe",
-        picture: "John-doe.png",
-      },
-      upvotes: 123432,
-      views: 12332,
-      answers: [],
-      createdAt: new Date(2024, 7, 1),
-    },
-    {
-      _id: "2",
-      title:
-        "The Lightning Component c:LWC_PizzaTracker generated invalid output for field status. Error How to solve this",
-      tags: [
-        { _id: "1", name: "Vue" },
-        { _id: "2", name: "Python" },
-      ],
-      author: {
-        _id: "1",
-        name: "John Salay",
-        picture: "John-salay.png",
-      },
-      upvotes: 24234231434,
-      views: 1000000,
-      answers: [],
-      createdAt: new Date(2022, 7, 4),
-    },
-  ];
-
+const Home = async () => {
+  const result = await getQuestions({});
   return (
     <>
       <div className="flex flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -75,8 +38,8 @@ const Home = () => {
       </div>
       <HomeFilters />
       <div className="mt-10 flex w-full flex-col gap-6">
-        {questions.length > 0 ? (
-          questions.map((question) => (
+        {result.questions.length > 0 ? (
+          result.questions.map((question) => (
             <QuestionCard
               key={question._id}
               _id={question._id}
