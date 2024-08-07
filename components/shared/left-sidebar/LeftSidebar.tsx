@@ -65,7 +65,9 @@ const LeftSidebar = () => {
                 alt={"Account"}
                 className="invert-colors lg:hidden"
               />
-              <span className="max-lg:hidden">Sign up</span>
+              <span className="text-dark400_light900 max-lg:hidden">
+                Sign up
+              </span>
             </Button>
           </Link>
         </div>
