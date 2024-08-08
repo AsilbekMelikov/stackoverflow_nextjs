@@ -13,8 +13,8 @@ interface Props {
     name: string;
     value: string;
   }[];
-  otherClasses: string;
-  containerClasses: string;
+  otherClasses?: string;
+  containerClasses?: string;
 }
 
 const Filters = ({ filters, otherClasses, containerClasses }: Props) => {

@@ -39,3 +39,9 @@ export const GlobalSearchFilters = [
   { name: "User", value: "user" },
   { name: "Tag", value: "tag" },
 ];
+
+export const CommunityPageFilters = [
+  { name: "Popular", value: "popular" },
+  { name: "Highest Reputation", value: "highest_reputation" },
+  { name: "Moderators", value: "moderators" },
+];
