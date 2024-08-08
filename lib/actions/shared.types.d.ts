@@ -91,12 +91,12 @@ export interface CreateQuestionParams {
 //   path: string;
 // }
 
-// export interface GetAllTagsParams {
-//   page?: number;
-//   pageSize?: number;
-//   filter?: string;
-//   searchQuery?: string;
-// }
+export interface GetAllTagsParams {
+  page?: number;
+  pageSize?: number;
+  filter?: string;
+  searchQuery?: string;
+}
 
 // export interface GetQuestionsByTagIdParams {
 //   tagId: string;
@@ -105,10 +105,10 @@ export interface CreateQuestionParams {
 //   searchQuery?: string;
 // }
 
-// export interface GetTopInteractedTagsParams {
-//   userId: string;
-//   limit?: number;
-// }
+export interface GetTopInteractedTagsParams {
+  userId: string;
+  limit?: number;
+}
 
 export interface CreateUserParams {
   clerkId: string;
@@ -118,16 +118,16 @@ export interface CreateUserParams {
   picture: string;
 }
 
-// export interface GetUserByIdParams {
-//   userId: string;
-// }
+export interface GetUserByIdParams {
+  userId: string;
+}
 
-// export interface GetAllUsersParams {
-//   page?: number;
-//   pageSize?: number;
-//   filter?: string;
-//   searchQuery?: string; // Add searchQuery parameter
-// }
+export interface GetAllUsersParams {
+  page?: number;
+  pageSize?: number;
+  filter?: string;
+  searchQuery?: string; // Add searchQuery parameter
+}
 
 export interface UpdateUserParams {
   clerkId: string;
