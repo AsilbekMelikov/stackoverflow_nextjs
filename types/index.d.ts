@@ -1,4 +1,5 @@
 import { BADGE_CRITERIA } from "@/constants";
+import { QuestionData } from "./question-data";
 
 export interface SidebarLink {
   imgURL: string;
@@ -46,3 +47,23 @@ export interface BadgeCounts {
 }
 
 export type BadgeCriteriaType = keyof typeof BADGE_CRITERIA;
+
+export interface UserData {
+  _id: string;
+  clerkId: string;
+  name: string;
+  username: string;
+  email?: string;
+  picture: string;
+  reputation?: number;
+  saved?: QuestionData[];
+  joinedAt?: Date;
+}
+
+export interface Tags {
+  _id: string;
+  createdOn: string;
+  followers: UserData[];
+  name: string;
+  questions: QuestionData[];
+}

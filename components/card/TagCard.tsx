@@ -11,7 +11,7 @@ interface ITag {
 const TagCard = ({ _id, name, questions }: ITag) => {
   return (
     <Link
-      href={`/tag/${_id}`}
+      href={`/tags/${_id}`}
       className="card-wrapper light-border shadow-light100_darknone rounded-2xl"
     >
       <article className="flex max-w-[260px] flex-col items-start justify-center px-7 py-10">
