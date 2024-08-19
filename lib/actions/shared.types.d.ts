@@ -18,27 +18,27 @@ export interface CreateQuestionParams {
   path: string;
 }
 
-// export interface CreateAnswerParams {
-//   content: string;
-//   author: string; // User ID
-//   question: string; // Question ID
-//   path: string;
-// }
+export interface CreateAnswerParams {
+  content: string;
+  author: string; // User ID
+  question: string; // Question ID
+  path: string;
+}
 
-// export interface GetAnswersParams {
-//   questionId: string;
-//   sortBy?: string;
-//   page?: number;
-//   pageSize?: number;
-// }
+export interface GetAnswersParams {
+  questionId: string;
+  sortBy?: string;
+  page?: number;
+  pageSize?: number;
+}
 
-// export interface AnswerVoteParams {
-//   answerId: string;
-//   userId: string;
-//   hasupVoted: boolean;
-//   hasdownVoted: boolean;
-//   path: string;
-// }
+export interface AnswerVoteParams {
+  answerId: string;
+  userId: string;
+  hasupVoted: boolean;
+  hasdownVoted: boolean;
+  path: string;
+}
 
 // export interface DeleteAnswerParams {
 //   answerId: string;
@@ -71,13 +71,13 @@ export interface GetQuestionByIdParams {
   questionId: string;
 }
 
-// export interface QuestionVoteParams {
-//   questionId: string;
-//   userId: string;
-//   hasupVoted: boolean;
-//   hasdownVoted: boolean;
-//   path: string;
-// }
+export interface QuestionVoteParams {
+  questionId: string;
+  userId: string;
+  hasupVoted: boolean;
+  hasdownVoted: boolean;
+  path: string;
+}
 
 // export interface DeleteQuestionParams {
 //   questionId: string;

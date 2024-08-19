@@ -67,3 +67,13 @@ export interface Tags {
   name: string;
   questions: QuestionData[];
 }
+
+export interface Answers {
+  _id: string;
+  author: UserData;
+  question: QuestionData;
+  content: string;
+  upvotes: string[];
+  downvotes: string[];
+  createdAt: Date;
+}

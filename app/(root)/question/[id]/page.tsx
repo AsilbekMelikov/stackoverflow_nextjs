@@ -83,7 +83,17 @@ const QuestionDetail = async ({ params }: { params: Props }) => {
         })}
       </div>
 
-      <Answer />
+      <AllAnswers
+        questionId={JSON.stringify(result._id)}
+        userId={mongoUser._id}
+        totalAnswers={result.answers.length}
+      />
+
+      <Answer
+        question={result.content}
+        questionId={JSON.stringify(result._id)}
+        authorId={JSON.stringify(mongoUser._id)}
+      />
     </div>
   );
 };
