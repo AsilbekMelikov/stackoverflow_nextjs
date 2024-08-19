@@ -1,10 +1,14 @@
 import Answer from "@/components/forms/Answer";
+import AllAnswers from "@/components/shared/AllAnswers";
 import Metric from "@/components/shared/Metric";
 import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
+import Votes from "@/components/shared/Votes";
 import { getQuestionById } from "@/lib/actions/question.action";
+import { getUserById } from "@/lib/actions/user.action";
 import { formatNumber, getTimesStamp } from "@/lib/utils";
 import { QuestionData } from "@/types/question-data";
+import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -15,6 +19,12 @@ interface Props {
 
 const QuestionDetail = async ({ params }: { params: Props }) => {
   const result: QuestionData = await getQuestionById({ questionId: params.id });
+  const { userId: clerkId } = auth();
+
+  let mongoUser;
+  if (clerkId) {
+    mongoUser = await getUserById({ userId: clerkId });
+  }
 
   return (
     <div className="flex w-full flex-col items-start justify-center">
@@ -36,7 +46,16 @@ const QuestionDetail = async ({ params }: { params: Props }) => {
         </Link>
 
         <div className="paragraph-semibold text-dark300_light700 flex justify-end">
-          VOTING
+          <Votes
+            type="Question"
+            itemId={JSON.stringify(result._id)}
+            userId={JSON.stringify(mongoUser._id)}
+            upvotes={result.upvotes.length}
+            hasupVoted={result.upvotes.includes(mongoUser._id)}
+            downvotes={result.downvotes.length}
+            hasdownVoted={result.downvotes.includes(mongoUser._id)}
+            hasSaved={mongoUser?.saved.includes(result._id)}
+          />
         </div>
       </div>
 
