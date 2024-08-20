@@ -1,14 +1,16 @@
 "use client";
 
 import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
+import { viewQuestion } from "@/lib/actions/interaction.action";
 import {
   downvoteQuestion,
   upvoteQuestion,
 } from "@/lib/actions/question.action";
+import { saveUserQuestions } from "@/lib/actions/user.action";
 import { formatNumber } from "@/lib/utils";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import React from "react";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 
 interface Props {
   type: string;
@@ -32,9 +34,26 @@ const Votes = ({
   hasSaved,
 }: Props) => {
   const pathname = usePathname();
-  //   const router = useRouter();
+  const router = useRouter();
 
-  const handleSave = () => {};
+  useEffect(() => {
+    if (type === "Question") {
+      viewQuestion({
+        questionId: JSON.parse(itemId),
+        userId: userId ? JSON.parse(userId) : undefined,
+      });
+    }
+  }, [itemId, userId, pathname, router, type]);
+
+  const handleSave = async () => {
+    if (!userId) return;
+
+    await saveUserQuestions({
+      userId: JSON.parse(userId),
+      questionId: JSON.parse(itemId),
+      path: pathname,
+    });
+  };
 
   const handleVote = async (action: string) => {
     if (!userId) return;
@@ -128,7 +147,7 @@ const Votes = ({
           </div>
         </div>
       </div>
-      {type === "Question " && (
+      {type === "Question" && (
         <Image
           src={
             hasSaved
