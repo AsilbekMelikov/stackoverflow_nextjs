@@ -1,4 +1,4 @@
-import { Tags, UserData } from ".";
+import { Answers, Tags, UserData } from ".";
 
 export interface QuestionData {
   _id: string;
@@ -9,6 +9,6 @@ export interface QuestionData {
   upvotes: string[];
   downvotes: string[];
   author: UserData;
-  answers: string[];
+  answers: Answers[];
   createdAt: Date;
 }
