@@ -57,10 +57,10 @@ export interface AnswerVoteParams {
 //   searchQuery?: string;
 // }
 
-// export interface ViewQuestionParams {
-//   questionId: string;
-//   userId: string | undefined;
-// }
+export interface ViewQuestionParams {
+  questionId: string;
+  userId: string | undefined;
+}
 
 // export interface JobFilterParams {
 //   query: string;
@@ -135,19 +135,19 @@ export interface UpdateUserParams {
   path: string;
 }
 
-// export interface ToggleSaveQuestionParams {
-//   userId: string;
-//   questionId: string;
-//   path: string;
-// }
+export interface ToggleSaveQuestionParams {
+  userId: string;
+  questionId: string;
+  path: string;
+}
 
-// export interface GetSavedQuestionsParams {
-//   clerkId: string;
-//   page?: number;
-//   pageSize?: number;
-//   filter?: string;
-//   searchQuery?: string;
-// }
+export interface GetSavedQuestionsParams {
+  clerkId: string;
+  page?: number;
+  pageSize?: number;
+  filter?: string;
+  searchQuery?: string;
+}
 
 // export interface GetUserStatsParams {
 //   userId: string;
