@@ -98,12 +98,12 @@ export interface GetAllTagsParams {
   searchQuery?: string;
 }
 
-// export interface GetQuestionsByTagIdParams {
-//   tagId: string;
-//   page?: number;
-//   pageSize?: number;
-//   searchQuery?: string;
-// }
+export interface GetQuestionsByTagIdParams {
+  tagId: string;
+  page?: number;
+  pageSize?: number;
+  searchQuery?: string;
+}
 
 export interface GetTopInteractedTagsParams {
   userId: string;
