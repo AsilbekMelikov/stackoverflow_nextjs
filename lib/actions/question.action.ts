@@ -5,12 +5,16 @@ import { connectToDatabase } from "../mongoose";
 import Tag from "@/database/tag.model";
 import {
   CreateQuestionParams,
+  DeleteQuestionParams,
+  EditQuestionParams,
   GetQuestionByIdParams,
   GetQuestionsParams,
   QuestionVoteParams,
 } from "./shared.types";
 import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
+import Answer from "@/database/answer.model";
+import Interaction from "@/database/interaction.model";
 
 export async function getQuestions(params: GetQuestionsParams) {
   try {
@@ -153,6 +157,94 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
     }
 
     // Increment author's reputation
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function deleteQuestion(params: DeleteQuestionParams) {
+  try {
+    connectToDatabase();
+
+    const { questionId, path } = params;
+
+    await Question.findByIdAndDelete(questionId);
+    await Answer.deleteMany({ question: questionId });
+    await Interaction.deleteMany({ question: questionId });
+    await Tag.updateMany(
+      { questions: questionId },
+      { $pull: { questions: questionId } }
+    );
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function editQuestion(params: EditQuestionParams) {
+  try {
+    connectToDatabase();
+
+    const { title, content, oldTags, newTags, questionId, path } = params;
+
+    await Question.findByIdAndUpdate(questionId, {
+      title,
+      content,
+    });
+
+    // removed tags from the question after editing
+    const removedTags = oldTags
+      .filter((tag) => !newTags.includes(tag.name))
+      .map((tag) => tag._id);
+
+    // added tags to the question after editing
+    const addedTags = newTags.filter((item) => {
+      for (const tag of oldTags) {
+        if (tag.name === item) {
+          return false;
+        }
+      }
+      return true;
+    });
+
+    if (removedTags.length > 0) {
+      for (const removedTag of removedTags) {
+        await Question.findByIdAndUpdate(questionId, {
+          $pull: { tags: removedTag },
+        });
+
+        const tag = await Tag.findById(removedTag);
+        if (tag.questions.length > 1) {
+          await Tag.findByIdAndUpdate(removedTag, {
+            $pull: { questions: questionId },
+          });
+        } else {
+          await Tag.deleteOne({ _id: removedTag });
+        }
+      }
+    }
+
+    if (addedTags.length > 0) {
+      const tagDocuments = [];
+      for (const tag of addedTags) {
+        const existingTag = await Tag.findOneAndUpdate(
+          {
+            name: { $regex: new RegExp(`^${tag}$`, "i") },
+          },
+          { $setOnInsert: { name: tag }, $addToSet: { questions: questionId } },
+          { upsert: true, new: true }
+        );
+        tagDocuments.push(existingTag._id);
+      }
+      await Question.findByIdAndUpdate(questionId, {
+        $push: { tags: { $each: tagDocuments } },
+      });
+    }
 
     revalidatePath(path);
   } catch (error) {

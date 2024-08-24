@@ -1,6 +1,7 @@
 import { Schema } from "mongoose";
 
 import { IUser } from "@/mongodb";
+import { Tags } from "@/types";
 
 // collapse(1:159)
 export interface GetQuestionsParams {
@@ -40,10 +41,10 @@ export interface AnswerVoteParams {
   path: string;
 }
 
-// export interface DeleteAnswerParams {
-//   answerId: string;
-//   path: string;
-// }
+export interface DeleteAnswerParams {
+  answerId: string;
+  path: string;
+}
 
 // export interface SearchParams {
 //   query?: string | null;
@@ -79,17 +80,19 @@ export interface QuestionVoteParams {
   path: string;
 }
 
-// export interface DeleteQuestionParams {
-//   questionId: string;
-//   path: string;
-// }
+export interface DeleteQuestionParams {
+  questionId: string;
+  path: string;
+}
 
-// export interface EditQuestionParams {
-//   questionId: string;
-//   title: string;
-//   content: string;
-//   path: string;
-// }
+export interface EditQuestionParams {
+  questionId: string;
+  title: string;
+  content: string;
+  oldTags: Tags[];
+  newTags: string[];
+  path: string;
+}
 
 export interface GetAllTagsParams {
   page?: number;
@@ -149,11 +152,11 @@ export interface GetSavedQuestionsParams {
   searchQuery?: string;
 }
 
-// export interface GetUserStatsParams {
-//   userId: string;
-//   page?: number;
-//   pageSize?: number;
-// }
+export interface GetUserStatsParams {
+  userId: string;
+  page?: number;
+  pageSize?: number;
+}
 
 export interface DeleteUserParams {
   clerkId: string;

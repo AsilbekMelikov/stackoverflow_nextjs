@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -18,29 +18,42 @@ import { Input } from "@/components/ui/input";
 import { QuestionsSchema } from "@/lib/validations";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
-import { createQuestion } from "@/lib/actions/question.action";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "@/context/ThemeProvider";
 
-const type: string = "create";
-
 interface Props {
+  type?: string;
   mongoUserId: string;
+  questionDetails?: string;
+}
+interface ITag {
+  _id: string;
+  name: string;
 }
 
-const Question = ({ mongoUserId }: Props) => {
+const Question = ({ type, mongoUserId, questionDetails }: Props) => {
   const { mode } = useTheme();
   const editorRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
+  const parsedQuestionDetails = questionDetails
+    ? JSON.parse(questionDetails)
+    : "";
+
+  const tagNames = useMemo(
+    () => parsedQuestionDetails?.tags?.map((tag: ITag) => tag.name),
+    [parsedQuestionDetails.tags]
+  );
+
   const form = useForm<z.infer<typeof QuestionsSchema>>({
     resolver: zodResolver(QuestionsSchema),
     defaultValues: {
-      title: "",
-      explanation: "",
-      tags: [],
+      title: parsedQuestionDetails.title || "",
+      explanation: parsedQuestionDetails.content || "",
+      tags: tagNames || [],
     },
   });
 
@@ -86,15 +99,28 @@ const Question = ({ mongoUserId }: Props) => {
     setIsSubmitting(true);
 
     try {
-      await createQuestion({
-        title: values.title,
-        content: values.explanation,
-        tags: values.tags,
-        author: JSON.parse(mongoUserId),
-        path: pathname,
-      });
+      if (type === "Edit") {
+        await editQuestion({
+          title: values.title,
+          content: values.explanation,
+          oldTags: parsedQuestionDetails.tags,
+          newTags: values.tags,
+          questionId: parsedQuestionDetails._id,
+          path: pathname,
+        });
 
-      router.push("/");
+        router.push(`/question/${parsedQuestionDetails._id}`);
+      } else {
+        await createQuestion({
+          title: values.title,
+          content: values.explanation,
+          tags: values.tags,
+          author: JSON.parse(mongoUserId),
+          path: pathname,
+        });
+
+        router.push("/");
+      }
     } catch (error) {
     } finally {
       setIsSubmitting(false);
@@ -149,7 +175,7 @@ const Question = ({ mongoUserId }: Props) => {
                   }}
                   onBlur={field.onBlur}
                   onEditorChange={(content) => field.onChange(content)}
-                  initialValue=""
+                  value={field.value}
                   init={{
                     height: 350,
                     menubar: false,
@@ -244,10 +270,10 @@ const Question = ({ mongoUserId }: Props) => {
           disabled={isSubmitting}
         >
           {isSubmitting
-            ? type === "edit"
+            ? type === "Edit"
               ? "Editing..."
               : "Posting..."
-            : type === "edit"
+            : type === "Edit"
               ? "Edit a question"
               : "Ask a question"}
         </Button>

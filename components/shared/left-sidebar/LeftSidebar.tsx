@@ -3,12 +3,14 @@
 import { Button } from "@/components/ui/button";
 import { sidebarLinks } from "@/constants";
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
 const LeftSidebar = () => {
+  const { userId } = useAuth();
   const pathname = usePathname();
 
   return (
@@ -18,6 +20,13 @@ const LeftSidebar = () => {
           const isActive =
             (pathname.includes(link.route) && link.route.length > 1) ||
             pathname === link.route;
+
+          if (link.route === "/profile") {
+            if (userId) {
+              link.route = `/profile/${userId}`;
+            } else return null;
+          }
+
           return (
             <Link
               href={link.route}

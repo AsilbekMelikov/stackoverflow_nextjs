@@ -55,9 +55,13 @@ export interface UserData {
   username: string;
   email?: string;
   picture: string;
+  password?: string;
+  bio?: string;
+  location?: string;
+  portfolioWebsite?: string;
   reputation?: number;
   saved?: QuestionData[];
-  joinedAt?: Date;
+  joinedAt: Date;
 }
 
 export interface Tags {

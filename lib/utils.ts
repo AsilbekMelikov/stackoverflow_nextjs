@@ -59,3 +59,10 @@ export const formatNumber = (value: number): string => {
     return `${formattedVal}B`;
   }
 };
+
+export const getJoinedDate = (date: Date): string => {
+  const month = date.toLocaleString("default", { month: "long" });
+  const year = date.getFullYear();
+
+  return `${month} ${year}`;
+};
