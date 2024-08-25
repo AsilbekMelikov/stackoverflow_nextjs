@@ -174,10 +174,20 @@ export async function deleteQuestion(params: DeleteQuestionParams) {
     await Question.findByIdAndDelete(questionId);
     await Answer.deleteMany({ question: questionId });
     await Interaction.deleteMany({ question: questionId });
-    await Tag.updateMany(
-      { questions: questionId },
-      { $pull: { questions: questionId } }
-    );
+    const tagsToUpdate = await Tag.find({ questions: questionId });
+
+    for (const tag of tagsToUpdate) {
+      // Update tag questions if questions' length is greater than 1
+      if (tag.questions.length > 1) {
+        await Tag.updateOne(
+          { _id: tag._id },
+          { $pull: { questions: questionId } }
+        );
+        // Delete the tag if questions' length is equal to 1.
+      } else {
+        await Tag.deleteOne({ _id: tag._id });
+      }
+    }
 
     revalidatePath(path);
   } catch (error) {
