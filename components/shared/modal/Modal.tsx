@@ -40,7 +40,11 @@ const Modal = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className={`${otherClasses}`}>{triggerButtonCont}</Button>
+        {typeof triggerButtonCont === "string" ? (
+          <Button className={otherClasses}>{triggerButtonCont}</Button>
+        ) : (
+          triggerButtonCont
+        )}
       </DialogTrigger>
       <DialogContent className="bg-white dark:border-dark-500 dark:bg-dark-400">
         {progress !== 0 && <Progress value={progress} className="mb-2" />}

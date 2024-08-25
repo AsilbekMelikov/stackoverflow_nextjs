@@ -262,3 +262,28 @@ export async function editQuestion(params: EditQuestionParams) {
     throw error;
   }
 }
+
+export async function getHotQuestions() {
+  try {
+    connectToDatabase();
+
+    const topInteractedQuestions = await Question.aggregate([
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          views: 1,
+          upvotes: 1,
+          answersCount: { $size: "$answers" },
+        },
+      },
+      { $sort: { views: -1, upvotes: -1, answersCount: -1 } },
+      { $limit: 5 },
+    ]);
+
+    return topInteractedQuestions;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}

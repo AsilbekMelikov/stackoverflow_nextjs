@@ -2,50 +2,23 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import RenderTag from "../RenderTag";
+import { getHotQuestions } from "@/lib/actions/question.action";
+import { getPopularTags } from "@/lib/actions/tag.action";
 
-const RightSidebar = () => {
-  const hotQuestions = [
-    {
-      id: "1",
-      title:
-        "Would it be appropriate to point out an error in another paper during a referee report?",
-    },
-    { id: "2", title: "How can an airconditioning machine exist?" },
-    { id: "3", title: "Interrogated every time crossing UK Border as citizen" },
-    { id: "4", title: "Low digit addition generator" },
-    {
-      id: "5",
-      title: "What is an example of 3 numbers that do not make up a vector?",
-    },
-  ];
+interface IHotQuestions {
+  _id: string;
+  title: string;
+}
 
-  const popularTags = [
-    {
-      id: "1",
-      name: "Javascript",
-      totalQuestions: 5,
-    },
-    {
-      id: "2",
-      name: "Vue",
-      totalQuestions: 10,
-    },
-    {
-      id: "3",
-      name: "React",
-      totalQuestions: 8,
-    },
-    {
-      id: "4",
-      name: "Python",
-      totalQuestions: 3,
-    },
-    {
-      id: "5",
-      name: "Java",
-      totalQuestions: 7,
-    },
-  ];
+interface IPopularTags {
+  _id: string;
+  name: string;
+  totalQuestions: number;
+}
+
+const RightSidebar = async () => {
+  const hotQuestions: IHotQuestions[] = await getHotQuestions();
+  const popularTags: IPopularTags[] = await getPopularTags();
 
   return (
     <section className="light-border background-light900_dark200 custom-scrollbar sticky right-0 top-0 flex h-screen w-[330px] flex-col overflow-y-auto border-l p-6 pt-36 shadow-light-300 dark:shadow-none max-xl:hidden">
@@ -55,12 +28,13 @@ const RightSidebar = () => {
           {hotQuestions.map((question) => {
             return (
               <Link
-                key={question.id}
-                href={`/questions/${question.id}`}
+                key={question._id}
+                href={`/question/${question._id}`}
                 className="flex items-center justify-between gap-7"
               >
                 <p className="text-dark200_light900 body-medium">
-                  {question.title}
+                  {question.title?.at(0)?.toUpperCase() +
+                    question.title?.slice(1)}
                 </p>
                 <Image
                   src={"/assets/icons/chevron-right.svg"}
@@ -80,8 +54,8 @@ const RightSidebar = () => {
           {popularTags.map((tag) => {
             return (
               <RenderTag
-                key={tag.id}
-                _id={tag.id}
+                key={tag._id}
+                _id={tag._id}
                 name={tag.name}
                 totalQuestions={tag.totalQuestions}
                 showCount
