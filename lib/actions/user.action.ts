@@ -52,12 +52,10 @@ export async function updateUser(params: UpdateUserParams) {
 
     const { clerkId, updateData, path } = params;
 
-    const updatedUser = await User.findOneAndUpdate({ clerkId }, updateData, {
+    await User.findOneAndUpdate({ clerkId }, updateData, {
       new: true,
     });
     revalidatePath(path);
-
-    return updatedUser;
   } catch (error) {}
 }
 

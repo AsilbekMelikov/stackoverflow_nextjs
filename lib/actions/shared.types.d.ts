@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
 
 import { IUser } from "@/mongodb";
-import { Tags } from "@/types";
+import { Tags, UserData } from "@/types";
 
 // collapse(1:159)
 export interface GetQuestionsParams {
@@ -134,7 +134,7 @@ export interface GetAllUsersParams {
 
 export interface UpdateUserParams {
   clerkId: string;
-  updateData: Partial<IUser>;
+  updateData: Partial<UserData>;
   path: string;
 }
 
