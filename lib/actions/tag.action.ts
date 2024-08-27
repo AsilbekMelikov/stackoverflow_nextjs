@@ -15,9 +15,15 @@ export async function getAllTags(params: GetAllTagsParams) {
   try {
     connectToDatabase();
 
-    // const { page = 1, pageSize = 10, filter, searchQuery } = params;
+    const { searchQuery } = params;
 
-    const tags = await Tag.find({}).sort({ createdAt: -1 });
+    const query: FilterQuery<typeof Tag> = searchQuery
+      ? {
+          name: { $regex: new RegExp(searchQuery, "i") },
+        }
+      : {};
+
+    const tags = await Tag.find(query).sort({ createdAt: -1 });
 
     return { tags };
   } catch (error) {
@@ -56,12 +62,19 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
 
     const tagFilter: FilterQuery<ITag> = { _id: tagId };
 
+    const query: FilterQuery<typeof Question> = {};
+
+    if (searchQuery) {
+      query.$or = [
+        { title: { $regex: searchQuery, $options: "i" } },
+        { content: { $regex: searchQuery, $options: "i" } },
+      ];
+    }
+
     const tag = await Tag.findOne(tagFilter).populate({
       path: "questions",
       model: Question,
-      match: searchQuery
-        ? { title: { $regex: searchQuery, $options: "i" } }
-        : {},
+      match: query,
       options: {
         sort: { createdAt: -1 },
       },

@@ -15,6 +15,7 @@ interface TagQuestions {
 const TagDetail = async ({ params, searchParams }: URLProps) => {
   const result: TagQuestions = await getQuestionsByTagId({
     tagId: params.id,
+    searchQuery: searchParams.q,
   });
 
   return (
@@ -25,7 +26,7 @@ const TagDetail = async ({ params, searchParams }: URLProps) => {
 
       <div className="mt-11 w-full">
         <LocalSearchBar
-          route="/"
+          route={`/tags/${params.id}`}
           iconPosition="left"
           imgSrc="/assets/icons/search.svg"
           placeholder="Search tag questions..."

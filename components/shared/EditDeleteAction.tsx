@@ -24,8 +24,8 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
 
   const progressAction = (timer: ReturnType<typeof setInterval>) => {
     setProgress((prev) => {
-      if (prev < 80) {
-        return prev + 20;
+      if (prev < 90) {
+        return prev + 10;
       } else {
         clearInterval(timer);
         return prev;
