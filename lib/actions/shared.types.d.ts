@@ -8,7 +8,7 @@ export interface GetQuestionsParams {
   page?: number;
   pageSize?: number;
   searchQuery?: string;
-  filter?: string;
+  filter?: string[] | string;
 }
 
 export interface CreateQuestionParams {
@@ -28,7 +28,7 @@ export interface CreateAnswerParams {
 
 export interface GetAnswersParams {
   questionId: string;
-  sortBy?: string;
+  filter?: string;
   page?: number;
   pageSize?: number;
 }

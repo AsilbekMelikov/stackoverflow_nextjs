@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import qs from "query-string";
+import { PaginationData } from "@/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -71,7 +72,7 @@ export const getJoinedDate = (date: Date): string => {
 interface UrlQueryParams {
   params: string;
   key: string;
-  value: string | string[];
+  value: string | string[] | null;
 }
 
 export const formUrlQuery = ({ params, key, value }: UrlQueryParams) => {
@@ -105,4 +106,39 @@ export const removeKeysFromQuery = ({ params, keys }: RemoveUrlQueryParams) => {
     },
     { skipNull: true }
   );
+};
+
+export const createFirstAndLastPages = (
+  pageNumber: number[],
+  activePage: number,
+  totalPages: number
+) => {
+  let firstPages;
+  if (activePage > 0 && activePage < 4 && totalPages > 5) {
+    firstPages = pageNumber.slice(1, activePage > 2 ? activePage + 1 : 3);
+  } else if (activePage > 3 && totalPages > 5 && activePage < totalPages - 1) {
+    firstPages = pageNumber.slice(activePage - 2, activePage + 1);
+  } else if (activePage >= totalPages - 1 && totalPages > 5) {
+    firstPages = pageNumber.slice(totalPages - 4, totalPages - 1);
+  }
+  return firstPages || pageNumber;
+};
+
+export const paginationSelectOptions = (total: number): PaginationData[] => {
+  const pageSizes = [5, 10, 20, 50, 100, 500];
+  return pageSizes
+    .filter((size) => size <= total)
+    .map((size) => ({
+      name: `${size.toString().padStart(2, "0")}/ page`,
+      value: size.toString().padStart(2, "0"),
+    }))
+    .concat(
+      pageSizes
+        .filter((size) => size > total)
+        .slice(0, 1)
+        .map((size) => ({
+          name: `${size.toString().padStart(2, "0")}/ page`,
+          value: size.toString().padStart(2, "0"),
+        }))
+    );
 };

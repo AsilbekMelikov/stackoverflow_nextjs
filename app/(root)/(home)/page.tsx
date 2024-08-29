@@ -9,11 +9,14 @@ import { getQuestions } from "@/lib/actions/question.action";
 import Link from "next/link";
 import React from "react";
 import { SearchParamsProps } from "@/types";
+import Pagination from "@/components/shared/Pagination";
 
 const Home = async ({ searchParams }: SearchParamsProps) => {
   const result = await getQuestions({
     searchQuery: searchParams.q,
     filter: searchParams.filter,
+    page: searchParams.page ? +searchParams.page : 1,
+    pageSize: searchParams.page_size ? +searchParams.page_size : 5,
   });
 
   // TODO: Fetch recommended questions
@@ -70,6 +73,7 @@ const Home = async ({ searchParams }: SearchParamsProps) => {
           />
         )}
       </div>
+      <Pagination totalData={result.totalQuestions} />
     </>
   );
 };

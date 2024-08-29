@@ -7,6 +7,11 @@ export interface SidebarLink {
   label: string;
 }
 
+export interface PaginationData {
+  name: string;
+  value: string;
+}
+
 export interface Job {
   id?: string;
   employer_name?: string;

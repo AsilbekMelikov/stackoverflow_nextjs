@@ -15,7 +15,31 @@ export async function getAllTags(params: GetAllTagsParams) {
   try {
     connectToDatabase();
 
-    const { searchQuery } = params;
+    const { searchQuery, filter, page = 1, pageSize = 5 } = params;
+
+    let sortOptions = {};
+    const switchCaseFn = (item: string) => {
+      switch (item) {
+        case "popular":
+          sortOptions = { ...sortOptions, questions: -1 };
+          break;
+        case "recent":
+          sortOptions = { ...sortOptions, createdOn: -1 };
+          break;
+        case "name":
+          sortOptions = { ...sortOptions, name: 1 };
+          break;
+        case "old":
+          sortOptions = { ...sortOptions, createdOn: 1 };
+          break;
+        default:
+          break;
+      }
+    };
+
+    if (typeof filter === "string") {
+      switchCaseFn(filter);
+    }
 
     const query: FilterQuery<typeof Tag> = searchQuery
       ? {
@@ -23,9 +47,14 @@ export async function getAllTags(params: GetAllTagsParams) {
         }
       : {};
 
-    const tags = await Tag.find(query).sort({ createdAt: -1 });
+    const tags = await Tag.find(query)
+      .sort(sortOptions)
+      .skip((page - 1) * pageSize)
+      .limit(pageSize);
 
-    return { tags };
+    const totalTags = await Tag.countDocuments(query);
+
+    return { tags, totalTags };
   } catch (error) {
     console.log(error);
     throw error;
@@ -58,7 +87,7 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
   try {
     connectToDatabase();
 
-    const { tagId, searchQuery } = params;
+    const { tagId, searchQuery, page = 1, pageSize = 5 } = params;
 
     const tagFilter: FilterQuery<ITag> = { _id: tagId };
 
@@ -77,6 +106,8 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
       match: query,
       options: {
         sort: { createdAt: -1 },
+        skip: (page - 1) * pageSize,
+        limit: pageSize,
       },
       populate: [
         {
@@ -97,7 +128,16 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
     }
     const questions = tag.questions;
 
-    return { questions, tagName: tag.name };
+    const allTagQuestions = await Tag.findOne(tagFilter).populate({
+      path: "questions",
+      match: query,
+    });
+
+    return {
+      questions,
+      tagName: tag.name,
+      totalTagQuestions: allTagQuestions.questions.length,
+    };
   } catch (error) {
     console.log(error);
     throw error;

@@ -1,6 +1,7 @@
 import QuestionCard from "@/components/card/QuestionCard";
 import Filters from "@/components/shared/Filters";
 import NoResult from "@/components/shared/NoResult";
+import Pagination from "@/components/shared/Pagination";
 import LocalSearchBar from "@/components/shared/search/LocalSearchBar";
 import { QuestionFilters } from "@/constants/filters";
 import { getAllSavedQuestions } from "@/lib/actions/user.action";
@@ -11,6 +12,7 @@ import React from "react";
 
 interface SavedQuestions {
   questions: QuestionData[];
+  totalQuestions: number;
 }
 
 const Collection = async ({ searchParams }: SearchParamsProps) => {
@@ -23,6 +25,9 @@ const Collection = async ({ searchParams }: SearchParamsProps) => {
   const result: SavedQuestions = await getAllSavedQuestions({
     clerkId: userId,
     searchQuery: searchParams.q,
+    filter: searchParams.filter,
+    page: searchParams.page ? +searchParams.page : 1,
+    pageSize: searchParams.page_size ? +searchParams.page_size : 5,
   });
 
   return (
@@ -40,7 +45,6 @@ const Collection = async ({ searchParams }: SearchParamsProps) => {
         <Filters
           filters={QuestionFilters}
           otherClasses={"min-h-[56px] sm:min-w-[170px]"}
-          containerClasses={"hidden max-md:flex"}
         />
       </div>
       <div className="mt-10 flex w-full flex-col gap-6">
@@ -69,6 +73,7 @@ const Collection = async ({ searchParams }: SearchParamsProps) => {
           />
         )}
       </div>
+      <Pagination totalData={result.totalQuestions} />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import TagCard from "@/components/card/TagCard";
 import Filters from "@/components/shared/Filters";
 import NoResult from "@/components/shared/NoResult";
+import Pagination from "@/components/shared/Pagination";
 import LocalSearchBar from "@/components/shared/search/LocalSearchBar";
 import { TagFilters } from "@/constants/filters";
 import { getAllTags } from "@/lib/actions/tag.action";
@@ -10,6 +11,9 @@ import React from "react";
 const Tags = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllTags({
     searchQuery: searchParams.q,
+    filter: searchParams.filter,
+    page: searchParams.page ? +searchParams.page : 1,
+    pageSize: searchParams.page_size ? +searchParams.page_size : 5,
   });
 
   return (
@@ -52,6 +56,7 @@ const Tags = async ({ searchParams }: SearchParamsProps) => {
           linkTitle="Ask a question"
         />
       )}
+      <Pagination totalData={result.totalTags} />
     </>
   );
 };

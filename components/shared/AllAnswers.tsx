@@ -2,14 +2,15 @@ import React from "react";
 import Filters from "./Filters";
 import { AnswerFilters } from "@/constants/filters";
 import { getAllAnswers } from "@/lib/actions/answer.action";
-import { Answers } from "@/types";
+import { Answers, SearchParamsProps } from "@/types";
 import Link from "next/link";
 import Image from "next/image";
 import { getTimesStamp } from "@/lib/utils";
 import ParseHTML from "./ParseHTML";
 import Votes from "./Votes";
+import Pagination from "./Pagination";
 
-interface Props {
+interface Props extends SearchParamsProps {
   questionId: string;
   userId: string;
   totalAnswers: number;
@@ -17,11 +18,20 @@ interface Props {
 
 interface AllAnswersTypes {
   answers: Answers[];
+  unsortedTotalAnswers: number;
 }
 
-const AllAnswers = async ({ questionId, userId, totalAnswers }: Props) => {
+const AllAnswers = async ({
+  questionId,
+  userId,
+  totalAnswers,
+  searchParams,
+}: Props) => {
   const result: AllAnswersTypes = await getAllAnswers({
     questionId: JSON.parse(questionId),
+    filter: searchParams.filter,
+    page: searchParams.page ? +searchParams.page : 1,
+    pageSize: searchParams.page_size ? +searchParams.page_size : 5,
   });
 
   return (
@@ -76,6 +86,8 @@ const AllAnswers = async ({ questionId, userId, totalAnswers }: Props) => {
           </article>
         ))}
       </div>
+
+      <Pagination totalData={result.unsortedTotalAnswers} />
     </div>
   );
 };

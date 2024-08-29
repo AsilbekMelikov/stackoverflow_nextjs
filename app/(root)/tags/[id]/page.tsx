@@ -1,6 +1,7 @@
 import QuestionCard from "@/components/card/QuestionCard";
 
 import NoResult from "@/components/shared/NoResult";
+import Pagination from "@/components/shared/Pagination";
 import LocalSearchBar from "@/components/shared/search/LocalSearchBar";
 import { getQuestionsByTagId } from "@/lib/actions/tag.action";
 import { URLProps } from "@/types";
@@ -10,12 +11,15 @@ import React from "react";
 interface TagQuestions {
   questions: QuestionData[];
   tagName: string;
+  totalTagQuestions: number;
 }
 
 const TagDetail = async ({ params, searchParams }: URLProps) => {
   const result: TagQuestions = await getQuestionsByTagId({
     tagId: params.id,
     searchQuery: searchParams.q,
+    page: searchParams.page ? +searchParams.page : 1,
+    pageSize: searchParams.page_size ? +searchParams.page_size : 5,
   });
 
   return (
@@ -59,6 +63,8 @@ const TagDetail = async ({ params, searchParams }: URLProps) => {
           />
         )}
       </div>
+
+      <Pagination totalData={result.totalTagQuestions} />
     </>
   );
 };

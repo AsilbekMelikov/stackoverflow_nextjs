@@ -38,15 +38,43 @@ export const getAllAnswers = async (params: GetAnswersParams) => {
   try {
     connectToDatabase();
 
-    const { questionId } = params;
+    const { questionId, filter, page = 1, pageSize = 5 } = params;
+
+    let sortOptions = {};
+    const switchCaseFn = (item: string) => {
+      switch (item) {
+        case "highestUpvotes":
+          sortOptions = { ...sortOptions, upvotes: -1 };
+          break;
+        case "lowestUpvotes":
+          sortOptions = { ...sortOptions, downvotes: -1 };
+          break;
+        case "recent":
+          sortOptions = { ...sortOptions, createdAt: -1 };
+          break;
+        case "old":
+          sortOptions = { ...sortOptions, createdAt: 1 };
+          break;
+        default:
+          break;
+      }
+    };
+
+    if (typeof filter === "string") {
+      switchCaseFn(filter);
+    }
 
     const answers = await Answer.find({ question: questionId })
       .populate("author", "_id clerkId name picture", User)
-      .sort({
-        createdAt: -1,
-      });
+      .sort(sortOptions)
+      .skip((page - 1) * pageSize)
+      .limit(pageSize);
 
-    return { answers };
+    const unsortedTotalAnswers = await Answer.countDocuments({
+      question: questionId,
+    });
+
+    return { answers, unsortedTotalAnswers };
   } catch (error) {
     console.log(error);
     throw error;
