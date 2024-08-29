@@ -5,6 +5,7 @@ import React from "react";
 import Theme from "./Theme";
 import MobileNav from "./MobileNav";
 import GlobalSearch from "../search/GlobalSearch";
+import ModalGlobalSearch from "../search/ModalGlobalSearch";
 
 const Navbar = () => {
   return (
@@ -20,8 +21,11 @@ const Navbar = () => {
           Stack<span className="text-primary-500">Overflow</span>
         </p>
       </Link>
-      <GlobalSearch />
+      <div className="relative w-full max-w-[600px] max-lg:hidden">
+        <GlobalSearch />
+      </div>
       <div className="flex-between gap-5">
+        <ModalGlobalSearch />
         <Theme />
         <SignedIn>
           <UserButton

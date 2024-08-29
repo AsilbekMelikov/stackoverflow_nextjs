@@ -46,10 +46,10 @@ export interface DeleteAnswerParams {
   path: string;
 }
 
-// export interface SearchParams {
-//   query?: string | null;
-//   type?: string | null;
-// }
+export interface SearchParams {
+  query?: string | null;
+  type?: string | null;
+}
 
 // export interface RecommendedParams {
 //   userId: string;
