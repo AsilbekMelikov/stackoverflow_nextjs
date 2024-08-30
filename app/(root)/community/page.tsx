@@ -20,7 +20,7 @@ const Community = async ({ searchParams }: SearchParamsProps) => {
     <>
       <h1 className="h1-bold text-dark100_light900">All Users</h1>
 
-      <div className="mt-11 flex gap-7 max-sm:flex-col">
+      <div className="mt-11 flex gap-7 max-md:flex-col">
         <LocalSearchBar
           route="/community"
           imgSrc="/assets/icons/search.svg"
@@ -35,7 +35,7 @@ const Community = async ({ searchParams }: SearchParamsProps) => {
       </div>
 
       {result.users.length > 0 ? (
-        <div className="mt-12 grid grid-cols-1 gap-4 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-2 2xl:grid-cols-3">
+        <div className="mt-12 grid grid-cols-1 gap-4 xs:grid-cols-2 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
           {result?.users?.map((user) => {
             return (
               <UserCard

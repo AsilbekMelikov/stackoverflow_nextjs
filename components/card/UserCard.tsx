@@ -42,7 +42,7 @@ const UserCard = async ({
           <p className="body-regular text-dark500_light500 mt-2">@{username}</p>
         </div>
 
-        <div className="flex w-full justify-center gap-2">
+        <div className="flex w-full flex-wrap justify-center gap-2">
           {tags.length > 0 ? (
             tags.map((tag) => {
               return <RenderTag key={tag._id} _id={tag._id} name={tag.name} />;
