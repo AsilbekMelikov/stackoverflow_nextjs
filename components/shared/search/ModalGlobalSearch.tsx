@@ -20,7 +20,7 @@ const ModalGlobalSearch = () => {
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
       <DialogTrigger asChild>
-        <div className="p-1.5 rounded-md hover:background-light800_dark300 transition-all duration-300 cursor-pointer">
+        <div className="hover:background-light800_dark300 cursor-pointer rounded-md p-1.5 transition-all duration-300">
           <Image
             src={"/assets/icons/search.svg"}
             width={24}
@@ -30,7 +30,7 @@ const ModalGlobalSearch = () => {
           />
         </div>
       </DialogTrigger>
-      <DialogContent className="max-w-[800px] w-full top-[15%]">
+      <DialogContent className="top-[15%] w-full max-w-[800px]">
         <DialogHeader className="relative">
           <GlobalSearch handleCloseModal={handleCloseModal} />
         </DialogHeader>
