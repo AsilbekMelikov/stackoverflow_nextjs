@@ -21,11 +21,21 @@ export const createAnswers = async (params: CreateAnswerParams) => {
 
     const newAnswer = await Answer.create({ author, question, content });
 
-    await Question.findByIdAndUpdate(question, {
+    const questionObject = await Question.findByIdAndUpdate(question, {
       $push: { answers: newAnswer._id },
     });
 
     // TODO: Add interaction...
+    await Interaction.create({
+      user: author,
+      action: "answer",
+      question,
+      answer: newAnswer._id,
+      tags: questionObject.tags,
+    });
+
+    // Increment author's reputation by +10/-10 for creating an answer
+    await User.findByIdAndUpdate(author, { $inc: { reputation: 10 } });
 
     revalidatePath(path);
   } catch (error) {
@@ -113,6 +123,13 @@ export const upvoteAnswer = async (params: AnswerVoteParams) => {
     }
 
     // TODO, add the author's reputation
+    await User.findByIdAndUpdate(userId, {
+      $inc: { reputation: hasupVoted ? -2 : 2 },
+    });
+
+    await User.findByIdAndUpdate(updatedAnswer.author, {
+      $inc: { reputation: hasupVoted ? -10 : 10 },
+    });
 
     revalidatePath(path);
   } catch (error) {
@@ -152,6 +169,13 @@ export const downvoteAnswer = async (params: AnswerVoteParams) => {
     }
 
     // TODO, add the author's reputation
+    await User.findByIdAndUpdate(userId, {
+      $inc: { reputation: hasdownVoted ? -2 : 2 },
+    });
+
+    await User.findByIdAndUpdate(updatedAnswer.author, {
+      $inc: { reputation: hasdownVoted ? -10 : 10 },
+    });
 
     revalidatePath(path);
   } catch (error) {

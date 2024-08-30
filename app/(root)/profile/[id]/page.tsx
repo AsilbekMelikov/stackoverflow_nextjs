@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { getUserInfo } from "@/lib/actions/user.action";
-import { URLProps, UserData } from "@/types";
+import { BadgeCounts, URLProps, UserData } from "@/types";
 import { SignedIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
@@ -17,6 +17,7 @@ interface IUserInfo {
   user: UserData;
   totalQuestions: number;
   totalAnswers: number;
+  badgeCounts: BadgeCounts;
 }
 
 const ProfilePage = async ({ params, searchParams }: URLProps) => {
@@ -81,8 +82,10 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
       </div>
 
       <Stats
+        reputation={userInfo.user.reputation}
         totalAnswers={userInfo.totalAnswers}
         totalQuestions={userInfo.totalQuestions}
+        badgeCounts={userInfo.badgeCounts}
       />
 
       <div className="mt-10 flex gap-10">

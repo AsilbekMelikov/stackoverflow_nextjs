@@ -64,6 +64,8 @@ const Pagination = ({ totalData }: Props) => {
     setActivePage(nextPageNumber);
   };
 
+  if (!totalData) return null;
+
   return (
     <div className="mt-9 flex items-center justify-center">
       <div className="flex gap-5 max-sm:flex-col-reverse">

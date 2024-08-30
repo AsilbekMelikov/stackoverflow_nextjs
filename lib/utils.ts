@@ -1,7 +1,8 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import qs from "query-string";
-import { PaginationData } from "@/types";
+import { BadgeCounts, BadgeCriteriaType, PaginationData } from "@/types";
+import { BADGE_CRITERIA } from "@/constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -141,4 +142,37 @@ export const paginationSelectOptions = (total: number): PaginationData[] => {
           value: size.toString().padStart(2, "0"),
         }))
     );
+};
+
+interface BadgeParam {
+  criteria: {
+    type: BadgeCriteriaType;
+    count: number;
+  }[];
+}
+
+type levelType = keyof BadgeCounts;
+
+export const assignBadges = (params: BadgeParam) => {
+  const badgeCounts: BadgeCounts = {
+    GOLD: 0,
+    SILVER: 0,
+    BRONZE: 0,
+  };
+
+  const { criteria } = params;
+
+  criteria.forEach((item) => {
+    const { type, count } = item;
+
+    const badgeLevels = BADGE_CRITERIA[type];
+
+    Object.keys(badgeLevels).forEach((level) => {
+      if (count >= badgeLevels[level as levelType]) {
+        badgeCounts[level as levelType]++;
+      }
+    });
+  });
+
+  return badgeCounts;
 };
