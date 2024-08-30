@@ -105,7 +105,7 @@ export async function createQuestion(params: CreateQuestionParams) {
 
     // Create an interaction record for the user's ask_question action
     await Interaction.create({
-      userId: author,
+      user: author,
       action: "ask_question",
       question: question._id,
       tags: tagDocuments,
